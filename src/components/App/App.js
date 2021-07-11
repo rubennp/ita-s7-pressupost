@@ -23,8 +23,9 @@ function App() {
 
     if (pressupost.web) {
       total += 500;
-      if (pressupost.nPags > 1 || pressupost.nIdiomes > 1) 
+      if (pressupost.nPags > 1 || pressupost.nIdiomes > 1) {
         total += pressupost.nPags * pressupost.nIdiomes * 30;
+      }
     }
     if (pressupost.seo) total += 300;
     if (pressupost.ads) total += 200;
