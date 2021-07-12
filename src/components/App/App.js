@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { 
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom';
 
 // components
 import Panell from '../Panell';
@@ -8,6 +14,40 @@ import { GlobalStyle } from '../GlobalStyle';
 import { Pressupost } from './App.styled';
 
 function App() {
+  return (
+    <div className="App">
+      <GlobalStyle />
+      <Router>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/pressupost">Pressupost</Link>
+          </li>
+        </ul>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/pressupost">
+            <PagPressupost />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
+  );
+};
+
+const Home = () => {
+  return (
+    <div>
+      <h1>Home</h1>
+    </div>
+  );
+};
+
+const PagPressupost = () => {
   const [pressupost, setPressupost] = useState(
     { 
       web: false, 
@@ -53,8 +93,7 @@ function App() {
   },[pressupost]);
 
   return (
-    <div className="App">
-      <GlobalStyle />
+    <div>
       <h1>Que vols fer?</h1>
       <Pressupost>
         <p><label><input checked={pressupost.web} type="checkbox" onChange={(e) => setPressupost({...pressupost, web: e.target.checked, nPags: 1, nIdiomes: 1}) } />Una pàgina web (500€)</label></p>
@@ -65,6 +104,6 @@ function App() {
       <h2>Total: {total}€</h2>
     </div>
   );
-}
+};
 
 export default App;
