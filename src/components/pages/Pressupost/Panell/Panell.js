@@ -38,4 +38,5 @@ const Panell = ({p, chPags, chIdiomes}) => {
         </Div>
     );
 };
+
 export default Panell;
