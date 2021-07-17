@@ -14,4 +14,8 @@ export const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     align-items: center;
   }
+
+  button:hover {
+    cursor: pointer;
+  }
 `;
