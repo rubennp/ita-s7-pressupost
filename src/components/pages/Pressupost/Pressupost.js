@@ -26,6 +26,7 @@ const Pressupost = () => {
   
     const chPags = (pags) => setPressupostActiu({...pressupostActiu, nPags: pags});
     const chIdiomes = (idiomes) => setPressupostActiu({...pressupostActiu, nIdiomes: idiomes});
+    const guardaPressupost = () => setPressupostos(prev => prev.splice(prev.findIndex(el => el.id === pressupostActiu.id), 1, pressupostActiu));
   
     // agafa dades del pressupostActiu de localStorage, si existeix, només en inicialitzar
     useEffect(function init() {
@@ -62,10 +63,6 @@ const Pressupost = () => {
       localStorage.setItem('pressupostos', JSON.stringify(pressupostos));
     }, [pressupostos]);
 
-    const guardaPressupost = () => {
-      setPressupostos(prev => prev.splice(prev.findIndex(el => el.id === pressupostActiu.id), 1, pressupostActiu));
-    };
-    
     // TODO: ara mateix si només es canvien els inputs de text, s'ha de clicar 2 vegades "Guardar"
     //       pq s'actualitzi pressupostos. Si es canvia qualsevol altra opció (a més a més o no dels
     //       textos) amb només un clic n'hi ha prou ¿¿¿???
