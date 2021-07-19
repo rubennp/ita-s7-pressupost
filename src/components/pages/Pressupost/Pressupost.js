@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // styled components
-import { Formulari, Btn } from './Pressupost.styled';
+import { Formulari, Btn, Main } from './Pressupost.styled';
 
 // components
 import Panell from './Panell';
@@ -38,11 +38,14 @@ const Pressupost = () => {
 
   // guardaPressupost(): event botó "Guardar"
   const guardaPressupost = () => {
-    let index = pressupostos.findIndex(el => el.id === pressupostActiu.id) === -1 ? false : this;
-    if (!index)
+    let index = pressupostos.findIndex(el => el.id === pressupostActiu.id);
+    if (index === -1)
       setPressupostos([...pressupostos, {...pressupostActiu, total}]);
-    else
-      setPressupostos(prev => prev.splice(prev.findIndex(el => el.id === pressupostActiu.id), 1, {...pressupostActiu, total}));
+    else {
+      let prev = pressupostos;
+      prev.splice(index, 1, {...pressupostActiu, total});
+      setPressupostos(prev);
+    }
   };
 
   // handleNouPressupost(): event botó "Nou"
@@ -93,66 +96,85 @@ const Pressupost = () => {
   //       textos) amb només un clic n'hi ha prou ¿¿¿???
 
   return (
-    <main>
-      <h1>Que vols fer?</h1>
-      <Formulari>
-        <p>
-          <label>Nom del pressupost: 
-            <input 
-              id="nom"
-              value={pressupostActiu.nom} 
-              type="text" 
-              onChange={e => setPressupostActiu({...pressupostActiu, nom: e.target.value})} 
-            />
-          </label>
-        </p>
-        <p>
-          <label>Client: 
-            <input
-              id="client" 
-              value={pressupostActiu.client} 
-              type="text" 
-              onChange={e => setPressupostActiu({...pressupostActiu, client: e.target.value})} 
-            />
-          </label>
-        </p>
-        <hr />
-        <p>
-          <label>
-            <input 
-              checked={pressupostActiu.web} 
-              type="checkbox" 
-              onChange={e => {
-                const num = pressupostActiu.web ? 0 : 1;
-                setPressupostActiu({...pressupostActiu, web: e.target.checked, nPags: num, nIdiomes: num})
-              }} 
-            />Una pàgina web (500€)
-          </label>
-        </p>
-        { pressupostActiu.web && <Panell p={pressupostActiu} chPags={chPags} chIdiomes={chIdiomes}/> }
-        <p>
-          <label>
-            <input 
-              checked={pressupostActiu.seo} 
-              type="checkbox" 
-              onChange={e => setPressupostActiu({...pressupostActiu, seo: e.target.checked})} 
-            />Una consultoría SEO (300€)
-          </label>
-        </p>
-        <p>
-          <label>
-            <input 
-              checked={pressupostActiu.ads} 
-              type="checkbox" 
-              onChange={e => setPressupostActiu({...pressupostActiu, ads: e.target.checked})}
-            />Una campanya de Google Ads (200€)
-          </label>
-        </p>
-        <Btn type="button" onClick={guardaPressupost}>Guarda</Btn>
-        <Btn type="button" onClick={handleNouPressupost}>Nou</Btn>
-      </Formulari>
-      <h2>Total: {total}€</h2>
-    </main>
+    <Main>
+      <div className="pressupost-actiu">
+        <h1>Que vols fer?</h1>
+        <Formulari>
+          <p>
+            <label>Nom del pressupost: 
+              <input 
+                id="nom"
+                value={pressupostActiu.nom} 
+                type="text" 
+                onChange={e => setPressupostActiu({...pressupostActiu, nom: e.target.value})} 
+              />
+            </label>
+          </p>
+          <p>
+            <label>Client: 
+              <input
+                id="client" 
+                value={pressupostActiu.client} 
+                type="text" 
+                onChange={e => setPressupostActiu({...pressupostActiu, client: e.target.value})} 
+              />
+            </label>
+          </p>
+          <hr />
+          <p>
+            <label>
+              <input 
+                checked={pressupostActiu.web} 
+                type="checkbox" 
+                onChange={e => {
+                  const num = pressupostActiu.web ? 0 : 1;
+                  setPressupostActiu({...pressupostActiu, web: e.target.checked, nPags: num, nIdiomes: num})
+                }} 
+              />Una pàgina web (500€)
+            </label>
+          </p>
+          { pressupostActiu.web && <Panell p={pressupostActiu} chPags={chPags} chIdiomes={chIdiomes}/> }
+          <p>
+            <label>
+              <input 
+                checked={pressupostActiu.seo} 
+                type="checkbox" 
+                onChange={e => setPressupostActiu({...pressupostActiu, seo: e.target.checked})} 
+              />Una consultoría SEO (300€)
+            </label>
+          </p>
+          <p>
+            <label>
+              <input 
+                checked={pressupostActiu.ads} 
+                type="checkbox" 
+                onChange={e => setPressupostActiu({...pressupostActiu, ads: e.target.checked})}
+              />Una campanya de Google Ads (200€)
+            </label>
+          </p>
+          <Btn type="button" onClick={guardaPressupost}>Guarda</Btn>
+          <Btn type="button" onClick={handleNouPressupost}>Nou</Btn>
+        </Formulari>
+        <h2>Total: {total}€</h2>
+      </div>
+      <aside className="pressupostos-guardats">
+        <div>
+        <h4>Pressupostos guardats</h4>
+        <ul>
+          {pressupostos.map((p) => {
+            return (
+              <li key={p.id} onClick={() => { setPressupostActiu(pressupostos[pressupostos.findIndex(el => el.id === p.id)]) }}>
+                <div className="pressupostGuardat">
+                  <span className="pressupostNom">{p.nom}</span>
+                  <span className="pressupostData">{p.data}</span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        </div>
+      </aside>
+    </Main>
   );
 };
 
