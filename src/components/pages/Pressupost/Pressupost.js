@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 
 // styled components
-import { Formulari, Btn, Main } from './Pressupost.styled';
+import { Formulari, Btn, Main, Lateral, PressupostActiu } from './Pressupost.styled';
 
 // components
 import Panell from './Panell';
+import PressupostosGuardats from "./PressupostosGuardats";
 
 const Pressupost = () => {
   const nouPressupost = (user) => {
@@ -42,14 +43,18 @@ const Pressupost = () => {
     if (index === -1)
       setPressupostos([...pressupostos, {...pressupostActiu, total}]);
     else {
-      let prev = pressupostos;
-      prev.splice(index, 1, {...pressupostActiu, total});
+      // !!
+      // https://stackoverflow.com/questions/58106664/react-usestate-hook-not-triggering-re-render-of-child-component
+      let prev = [...pressupostos];
+      prev.splice(index, 1, {...pressupostActiu, total, isSaved: true});
       setPressupostos(prev);
     }
   };
 
   // handleNouPressupost(): event botó "Nou"
   const handleNouPressupost = () => setPressupostActiu(nouPressupost(userLoggedIn));
+
+  const rescataPressupostGuardat = (id) => setPressupostActiu(pressupostos[pressupostos.findIndex(el => el.id === id)]);
 
   /* 
    * EFFECTS 
@@ -91,13 +96,9 @@ const Pressupost = () => {
     localStorage.setItem('pressupostos', JSON.stringify(pressupostos));
   }, [pressupostos]);
 
-  // TODO: ara mateix si només es canvien els inputs de text, s'ha de clicar 2 vegades "Guardar"
-  //       pq s'actualitzi pressupostos. Si es canvia qualsevol altra opció (a més a més o no dels
-  //       textos) amb només un clic n'hi ha prou ¿¿¿???
-
   return (
     <Main>
-      <div className="pressupost-actiu">
+      <PressupostActiu>
         <h1>Que vols fer?</h1>
         <Formulari>
           <p>
@@ -106,7 +107,7 @@ const Pressupost = () => {
                 id="nom"
                 value={pressupostActiu.nom} 
                 type="text" 
-                onChange={e => setPressupostActiu({...pressupostActiu, nom: e.target.value})} 
+                onChange={e => setPressupostActiu({...pressupostActiu, nom: e.target.value})}
               />
             </label>
           </p>
@@ -156,24 +157,10 @@ const Pressupost = () => {
           <Btn type="button" onClick={handleNouPressupost}>Nou</Btn>
         </Formulari>
         <h2>Total: {total}€</h2>
-      </div>
-      <aside className="pressupostos-guardats">
-        <div>
-        <h4>Pressupostos guardats</h4>
-        <ul>
-          {pressupostos.map((p) => {
-            return (
-              <li key={p.id} onClick={() => { setPressupostActiu(pressupostos[pressupostos.findIndex(el => el.id === p.id)]) }}>
-                <div className="pressupostGuardat">
-                  <span className="pressupostNom">{p.nom}</span>
-                  <span className="pressupostData">{p.data}</span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-        </div>
-      </aside>
+      </PressupostActiu>
+      <Lateral>
+        <PressupostosGuardats p={pressupostos} handleClick={rescataPressupostGuardat} />
+      </Lateral>
     </Main>
   );
 };
