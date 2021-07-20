@@ -11,7 +11,7 @@ const Pressupost = () => {
     return (
       {
         id: (Date.parse(new Date())+Math.random()).toString().replace('.', ''),
-        data: new Date().toLocaleString(''),
+        data: new Date().toLocaleString('ca'),
         user: user,
         nom: "",
         client: "",
