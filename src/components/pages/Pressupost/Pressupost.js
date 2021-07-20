@@ -46,7 +46,7 @@ const Pressupost = () => {
       // !!
       // https://stackoverflow.com/questions/58106664/react-usestate-hook-not-triggering-re-render-of-child-component
       let prev = [...pressupostos];
-      prev.splice(index, 1, {...pressupostActiu, total, isSaved: true});
+      prev.splice(index, 1, {...pressupostActiu, total});
       setPressupostos(prev);
     }
   };
