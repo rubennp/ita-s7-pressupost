@@ -54,7 +54,14 @@ const Pressupost = () => {
   // handleNouPressupost(): event botó "Nou"
   const handleNouPressupost = () => setPressupostActiu(nouPressupost(userLoggedIn));
 
+  // rescata info de pressupost guardat
   const rescataPressupostGuardat = (id) => setPressupostActiu(pressupostos[pressupostos.findIndex(el => el.id === id)]);
+
+  // esborra pressupost guardat
+  const esborraPressupostGuardat = (id) => {
+    setPressupostos(prev => prev.filter(el => el.id !== id));
+    if (pressupostActiu.id === id) handleNouPressupost();
+  };
 
   /* 
    * EFFECTS 
@@ -159,7 +166,7 @@ const Pressupost = () => {
         <h2>Total: {total}€</h2>
       </PressupostActiu>
       <Lateral>
-        <PressupostosGuardats p={pressupostos} handleClick={rescataPressupostGuardat} />
+        <PressupostosGuardats actiu={pressupostActiu.id} p={pressupostos} handleRescata={rescataPressupostGuardat} handleEsborra={esborraPressupostGuardat} />
       </Lateral>
     </Main>
   );

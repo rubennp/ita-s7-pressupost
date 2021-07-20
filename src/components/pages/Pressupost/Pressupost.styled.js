@@ -12,6 +12,8 @@ export const Main = styled.main`
     
     h1, h2, h4 { text-align: center }
 
+    h4 { margin-bottom: 0.5em; }
+
     h2 { margin-bottom: 0; }
 `;
 
@@ -28,30 +30,6 @@ export const Lateral = styled.aside`
     margin: 10px;
     box-shadow: 2px 2px 10px rgba(100, 100, 100, .5);
     background-color: rgba(100, 100, 100, .1);
-
-    ul {
-        padding: 0;
-        list-style-type: none;
-
-        div { 
-            margin: 10px;
-            padding: 10px;
-            background-color: #FFC078;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-
-            .pressupostData { 
-                display: block;
-                font-size: 0.75em;
-                color: gray;
-            }
-
-            &:hover {
-                cursor: pointer;
-                border: 1px solid white;
-                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            }
-        }
-    }
 `;
 
 export const Formulari = styled.form`
