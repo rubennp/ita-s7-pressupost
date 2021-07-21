@@ -1,8 +1,46 @@
 import styled from 'styled-components';
 
+export const SeccioGuardats = styled.div`
+    .cerca {
+        display: flex;
+        justify-content: center;
+        margin: 10px 5px;
+        background-color: rgba(100, 100, 100, .1);
+        padding: 5px;
+
+        label { font-size: 0.75em; }
+
+        button {
+            font-size: 1em;
+        }
+
+        li:nth-child(2) { 
+            margin: 0 5px !important; 
+        }
+
+        input {
+            margin-left: 5px;
+            border: none;
+            width: auto;
+        }
+
+        img {
+            height: 10px;
+            filter: opacity(50%);
+            margin-left: 5px;
+            
+            &:hover {
+                cursor: pointer;
+                filter: invert();
+            }
+        }
+    }
+`;
+
 export const Ordena = styled.ul`
     display: flex;
     justify-content: center;
+    margin: 10px 5px;
     padding: 0;
     list-style-type: none;
     
@@ -34,6 +72,10 @@ export const Ordena = styled.ul`
     li:nth-child(2) { margin: 0 10px; }
 `;
 
+export const Cerca = styled(Ordena)`
+    display: inline;
+`;
+
 export const Llistat = styled.ul`
     padding: 0;
     list-style-type: none;
@@ -50,6 +92,13 @@ export const Llistat = styled.ul`
             display: block;
             font-size: 0.75em;
             color: gray;
+        }
+        
+        .pressupostClient {
+            display: block;
+            font-size: 0.75em;
+            color: gray;
+            text-transform: uppercase;
         }
 
         &:hover {
