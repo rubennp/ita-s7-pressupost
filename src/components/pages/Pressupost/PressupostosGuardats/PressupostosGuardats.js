@@ -45,10 +45,11 @@ const PressupostosGuardats = ({actiu, p, handleRescata, handleEsborra }) => {
         <div className="cerca">
           <label>
             Cerca:
-            <input type="text" onChange={e => setCerca(e.target.value.toLowerCase())}/>
+            <input value={cerca} type="text" onChange={e => setCerca(e.target.value.toLowerCase())}/>
             <Cerca className="botonsCerca">
               <li><button type="button" className="active" onClick={() => setActiveCerca(NOM)}>NOM</button></li>
               <li><button type="button" onClick={() => setActiveCerca(CLIENT)}>CLIENT</button></li>
+              <li><img src="./img/delete.png" alt="icona paperera" onClick={() => setCerca('')}/></li>
             </Cerca>
           </label>
         </div>
