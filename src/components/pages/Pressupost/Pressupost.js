@@ -37,7 +37,7 @@ const Pressupost = () => {
   // chIdiomes(): (de Panell) set número d'idiomes al pressupost actiu
   const chIdiomes = (idiomes) => setPressupostActiu({...pressupostActiu, nIdiomes: idiomes});
 
-  // guardaPressupost(): event botó "Guardar"
+  // guardaPressupost(): event botó "Guardar" (ex10)
   const guardaPressupost = () => {
     let index = pressupostos.findIndex(el => el.id === pressupostActiu.id);
     if (index === -1)
