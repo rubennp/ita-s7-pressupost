@@ -153,7 +153,7 @@ const Pressupost = () => {
           </p>
           <p>
             <label>
-              <input 
+              <input
                 checked={pressupostActiu.ads} 
                 type="checkbox" 
                 onChange={e => setPressupostActiu({...pressupostActiu, ads: e.target.checked})}
