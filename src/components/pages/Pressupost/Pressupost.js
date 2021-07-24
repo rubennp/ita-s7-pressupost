@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Redirect, useLocation } from 'react-router';
+import { Redirect } from 'react-router';
 
 // styled components
 import { Formulari, Btn, Main, Lateral, PressupostActiu } from './Pressupost.styled';
@@ -8,7 +8,7 @@ import { Formulari, Btn, Main, Lateral, PressupostActiu } from './Pressupost.sty
 import Panell from './Panell';
 import PressupostosGuardats from "./PressupostosGuardats";
 
-const Pressupost = () => {
+const Pressupost = ({shared}) => {
   const hrefOrigin = window.location.origin;
 
   const nouPressupost = (user) => {
@@ -48,7 +48,7 @@ const Pressupost = () => {
     if (index === -1)
       setPressupostos([...pressupostos, {...pressupostActiu, total}]);
     else {
-      // !!
+      // Para mi, para tener en cuenta:      
       // https://stackoverflow.com/questions/58106664/react-usestate-hook-not-triggering-re-render-of-child-component
       let prev = [...pressupostos];
       prev.splice(index, 1, {...pressupostActiu, total});
@@ -73,7 +73,7 @@ const Pressupost = () => {
     navigator.permissions.query({name: 'clipboard-write'}).then(result => {
       if (result.state === 'granted' || result.state === 'prompt') {
         navigator.clipboard.writeText(shareLink).then(() => {
-          alert(`${shareLink} copiat.`);
+          alert(`Comparteix el link copiat al porta-retalls.`);
         }, () => {
           alert("No s'ha pogut copiar el link! Has de donar permisos al navegador.");
         });
@@ -85,12 +85,23 @@ const Pressupost = () => {
    * EFFECTS 
    */
 
-  const UseQuery = () => new URLSearchParams(useLocation().search);
-  let query = UseQuery();
-
-  // init(): agafa dades del pressupostActiu de localStorage, si existeix, només en inicialitzar.
+  // init(): comprova si és un link compartit o agafa dades del pressupostActiu de localStorage, si existeix (només en inicialitzar).
   useEffect(function init() {
-    if (!JSON.parse(query.get('shared'))) {
+    if (shared) {
+      setPressupostActiu({
+        id: shared.get('id'),
+        user: 'shared',
+        data: shared.get('data'),
+        nom: shared.get('nom'),
+        client: shared.get('client'),
+        web: JSON.parse(shared.get('web')),
+        nPags: JSON.parse(shared.get('nPags')) || 0,
+        nIdiomes: JSON.parse(shared.get('nIdiomes')) || 0,
+        seo: JSON.parse(shared.get('seo')),
+        ads: JSON.parse(shared.get('ads'))
+      });
+    }
+    else {
       setUserLoggedIn('guest');
 
       const actiuOnStorage = JSON.parse(localStorage.getItem('pressupostActiu'));
@@ -100,20 +111,6 @@ const Pressupost = () => {
       const pressupostosOnStorage = JSON.parse(localStorage.getItem('pressupostos'));
       if (!pressupostosOnStorage) localStorage.setItem('pressupostos', JSON.stringify(pressupostos));
       else setPressupostos(pressupostosOnStorage);
-    }
-    else {
-      setPressupostActiu({
-        id: query.get('id'),
-        user: 'shared',
-        data: query.get('data'),
-        nom: query.get('nom'),
-        client: query.get('client'),
-        web: JSON.parse(query.get('web')),
-        nPags: JSON.parse(query.get('nPags')) || 0,
-        nIdiomes: JSON.parse(query.get('nIdiomes')) || 0,
-        seo: JSON.parse(query.get('seo')),
-        ads: JSON.parse(query.get('ads'))
-      });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -138,6 +135,7 @@ const Pressupost = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[pressupostActiu]);
 
+  // si canvia link, canvia shared link
   useEffect(function changeShareLink() {
     setShareLink(`${hrefOrigin}${link}&shared=true`);
   }, [hrefOrigin,link]);

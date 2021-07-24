@@ -19,8 +19,9 @@ const App = () => {
   const loc = useRef(useLocation());
   const UseQuery = () => new URLSearchParams(useLocation().search);
   let query = UseQuery();
+  let shared = JSON.parse(query.get('shared')) || false;
 
-  if (!query.get('shared')) {
+  if (!shared) {
     const actiuOnStorage = JSON.parse(localStorage.getItem('pressupostActiu'));
     if (!actiuOnStorage) loc.current = '/pressupost';
     else loc.current = `/pressupost?id=${actiuOnStorage.id}&data=${actiuOnStorage.data}&nom=${actiuOnStorage.nom}&client=${actiuOnStorage.client}&web=${actiuOnStorage.web}${(actiuOnStorage) ? `&nPags=${actiuOnStorage.nPags}&nIdiomes=${actiuOnStorage.nIdiomes}` : ``}&seo=${actiuOnStorage.seo}&ads=${actiuOnStorage.ads}`;
@@ -45,7 +46,7 @@ const App = () => {
           <Benvinguda />
         </Route>
         <Route path="/pressupost">
-          <Pressupost />
+          {shared ? <Pressupost shared={query}/> : <Pressupost />};
         </Route>
       </Switch>
   </div>
