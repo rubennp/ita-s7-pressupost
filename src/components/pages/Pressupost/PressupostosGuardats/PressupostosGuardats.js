@@ -20,7 +20,11 @@ const PressupostosGuardats = ({actiu, p, handleRescata, handleEsborra }) => {
     if (cerca !== '') prev = prev.filter(el => el[cercaBy[activeCerca]].toLowerCase().includes(cerca));
 
     // ordena?
-    if (activeOrder !== INIT) prev.sort((a, b) => (a[orderBy[activeOrder]] === b[orderBy[activeOrder]]) ? 0 : (a[orderBy[activeOrder]] > b[orderBy[activeOrder]]) ? 1 : -1);
+    if (activeOrder !== INIT) {
+      prev.sort((a, b) => (a[orderBy[activeOrder]] === b[orderBy[activeOrder]]) ? 0 : (a[orderBy[activeOrder]] > b[orderBy[activeOrder]]) ? 1 : -1);
+      if (activeOrder === DATA) prev.reverse();
+    }
+    
     setLlistat(prev);
 
     document.querySelectorAll('button.active').forEach(el => el.classList.remove("active"));
