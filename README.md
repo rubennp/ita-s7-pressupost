@@ -9,4 +9,4 @@ Sobre las ramas:
     - `n3`: `ex11`
 3. `dev`: `n3`
 
-Sobre `ex11`: para no pisar comprobación de  localStorage al inicio y mantener funcionalidad hasta el momento pero poder compartir, creo un link especial para comapartir. Clicar botón "Comparteix!" y pegar link en ventana de incógnito (para no machacar datos guardados en localStorage normalmente)
+Sobre `ex11`: para no pisar comprobación de  localStorage al inicio y mantener funcionalidad hasta el momento pero poder compartir, creo un link especial para comapartir. Clicar botón "Comparteix!" y pegar link en ventana de incógnito (para no machacar datos guardados en localStorage normalmente).
