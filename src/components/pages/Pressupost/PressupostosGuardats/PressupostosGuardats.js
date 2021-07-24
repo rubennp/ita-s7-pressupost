@@ -12,7 +12,12 @@ const PressupostosGuardats = ({actiu, p, handleRescata, handleEsborra }) => {
 
   useEffect(() => {
     let prev = [...p];
-    if (activeOrder !== INIT) prev.sort((a, b) => (a[by[activeOrder]] === b[by[activeOrder]]) ? 0 : (a[by[activeOrder]] > b[by[activeOrder]]) ? 1 : -1);
+    if (activeOrder !== INIT) {
+      prev.sort((a, b) => (a[by[activeOrder]] === b[by[activeOrder]]) ? 0 : (a[by[activeOrder]] > b[by[activeOrder]]) ? 1 : -1);
+      if (activeOrder === DATA) {
+        prev.reverse();
+      }
+    }
     setLlistat(prev);
 
     document.querySelector('button.active').classList.remove("active");
