@@ -22,16 +22,9 @@ const PressupostosGuardats = ({actiu, p, handleRescata, handleEsborra }) => {
     // ordena?
     if (activeOrder !== INIT) {
       prev.sort((a, b) => (a[orderBy[activeOrder]] === b[orderBy[activeOrder]]) ? 0 : (a[orderBy[activeOrder]] > b[orderBy[activeOrder]]) ? 1 : -1);
-<<<<<<< HEAD
       if (activeOrder === DATA) prev.reverse();
     }
     
-=======
-      if (activeOrder === DATA) {
-        prev.reverse();
-      }
-    }
->>>>>>> ex11
     setLlistat(prev);
 
     document.querySelectorAll('button.active').forEach(el => el.classList.remove("active"));
