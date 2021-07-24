@@ -63,7 +63,7 @@ const PressupostosGuardats = ({actiu, p, handleRescata, handleEsborra }) => {
               <li key={p.id}>
                 <div className="pressupostGuardat">
                   <div>
-                    <span className={p.id === actiu ? "pressupostNom actiu" : "pressupostActiu"}>{p.nom}</span>
+                    <span className={p.id === actiu ? "actiu" : ""}>{p.nom}</span>
                     <span className="pressupostClient">{p.client}</span>
                     <span className="pressupostData">{p.data}</span>
                   </div>

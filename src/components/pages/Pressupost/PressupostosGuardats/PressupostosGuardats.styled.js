@@ -88,16 +88,13 @@ export const Llistat = styled.ul`
         background-color: #FFC078;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
-        .pressupostData { 
+        .pressupostData, .pressupostClient { 
             display: block;
             font-size: 0.75em;
             color: gray;
         }
         
         .pressupostClient {
-            display: block;
-            font-size: 0.75em;
-            color: gray;
             text-transform: uppercase;
         }
 
@@ -125,6 +122,5 @@ export const Llistat = styled.ul`
             font-weight: bold;
             text-shadow: 1px 1px 1px white;
         }
-    }
     }
 `;
