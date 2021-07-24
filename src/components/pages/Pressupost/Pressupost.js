@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Redirect, useLocation } from 'react-router';
 
 // styled components
 import { Formulari, Btn, Main, Lateral, PressupostActiu } from './Pressupost.styled';
@@ -8,6 +9,8 @@ import Panell from './Panell';
 import PressupostosGuardats from "./PressupostosGuardats";
 
 const Pressupost = () => {
+  const hrefOrigin = window.location.origin;
+
   const nouPressupost = (user) => {
     return (
       {
@@ -24,10 +27,12 @@ const Pressupost = () => {
       }
     );
   };
-
+  
   // State
-  const [pressupostActiu, setPressupostActiu] = useState(nouPressupost('guest'));
   const [userLoggedIn, setUserLoggedIn] = useState('guest');
+  const [pressupostActiu, setPressupostActiu] = useState(nouPressupost(userLoggedIn));
+  const [link, setLink] = useState(`/pressupost?nom=${pressupostActiu.nom}&client=${pressupostActiu.client}&web=${pressupostActiu.web}${(pressupostActiu) ? `&nPags=${pressupostActiu.nPags}&nIdiomes=${pressupostActiu.nIdiomes}` : ``}&seo=${pressupostActiu.seo}&ads=${pressupostActiu.ads}&id=${pressupostActiu.id}&data=${pressupostActiu.data}`);
+  const [shareLink, setShareLink] = useState(`${hrefOrigin}${link}&shared=true`);
   const [total, setTotal] = useState(0);
   const [pressupostos, setPressupostos] = useState([]);
 
@@ -63,20 +68,53 @@ const Pressupost = () => {
     if (pressupostActiu.id === id) handleNouPressupost();
   };
 
+  // comparteix la URL del pressupost
+  const comparteixURL = () => {
+    navigator.permissions.query({name: 'clipboard-write'}).then(result => {
+      if (result.state === 'granted' || result.state === 'prompt') {
+        navigator.clipboard.writeText(shareLink).then(() => {
+          alert(`${shareLink} copiat.`);
+        }, () => {
+          alert("No s'ha pogut copiar el link! Has de donar permisos al navegador.");
+        });
+      }
+    });
+  };
+
   /* 
    * EFFECTS 
    */
 
+  const UseQuery = () => new URLSearchParams(useLocation().search);
+  let query = UseQuery();
+
   // init(): agafa dades del pressupostActiu de localStorage, si existeix, només en inicialitzar.
   useEffect(function init() {
-    setUserLoggedIn('guest');
-    const actiuOnStorage = JSON.parse(localStorage.getItem('pressupostActiu'));
-    if (!actiuOnStorage) localStorage.setItem('pressupostActiu', JSON.stringify(pressupostActiu));
-    else setPressupostActiu(actiuOnStorage);
+    if (!JSON.parse(query.get('shared'))) {
+      setUserLoggedIn('guest');
 
-    const pressupostosOnStorage = JSON.parse(localStorage.getItem('pressupostos'));
-    if (!pressupostosOnStorage) localStorage.setItem('pressupostos', JSON.stringify(pressupostos));
-    else setPressupostos(pressupostosOnStorage);
+      const actiuOnStorage = JSON.parse(localStorage.getItem('pressupostActiu'));
+      if (!actiuOnStorage) localStorage.setItem('pressupostActiu', JSON.stringify(pressupostActiu));
+      else setPressupostActiu(actiuOnStorage);
+
+      const pressupostosOnStorage = JSON.parse(localStorage.getItem('pressupostos'));
+      if (!pressupostosOnStorage) localStorage.setItem('pressupostos', JSON.stringify(pressupostos));
+      else setPressupostos(pressupostosOnStorage);
+    }
+    else {
+      setPressupostActiu({
+        id: query.get('id'),
+        user: 'shared',
+        data: query.get('data'),
+        nom: query.get('nom'),
+        client: query.get('client'),
+        web: JSON.parse(query.get('web')),
+        nPags: JSON.parse(query.get('nPags')) || 0,
+        nIdiomes: JSON.parse(query.get('nIdiomes')) || 0,
+        seo: JSON.parse(query.get('seo')),
+        ads: JSON.parse(query.get('ads'))
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,9 +132,15 @@ const Pressupost = () => {
     if (pressupostActiu.ads) total += 200;
 
     setTotal(total);
-
+    setLink(`/pressupost?nom=${pressupostActiu.nom}&client=${pressupostActiu.client}&web=${pressupostActiu.web}${(pressupostActiu) ? `&nPags=${pressupostActiu.nPags}&nIdiomes=${pressupostActiu.nIdiomes}` : ``}&seo=${pressupostActiu.seo}&ads=${pressupostActiu.ads}&id=${pressupostActiu.id}&data=${pressupostActiu.data}`);
+    
     localStorage.setItem('pressupostActiu', JSON.stringify(pressupostActiu));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[pressupostActiu]);
+
+  useEffect(function changeShareLink() {
+    setShareLink(`${hrefOrigin}${link}&shared=true`);
+  }, [hrefOrigin,link]);
 
   // savePressupostosOnLocaleStorage(): quan canvia pressupostos, guarda a localeStorage, tb.
   useEffect(function savePressupostosOnLocaleStorage() {
@@ -162,12 +206,14 @@ const Pressupost = () => {
           </p>
           <Btn type="button" onClick={guardaPressupost}>Guarda</Btn>
           <Btn type="button" onClick={handleNouPressupost}>Nou</Btn>
+          <Btn type="button" onClick={comparteixURL}>Comparteix!</Btn>
         </Formulari>
         <h2>Total: {total}€</h2>
       </PressupostActiu>
       <Lateral>
         <PressupostosGuardats actiu={pressupostActiu.id} p={pressupostos} handleRescata={rescataPressupostGuardat} handleEsborra={esborraPressupostGuardat} />
       </Lateral>
+      <Redirect to={link} />
     </Main>
   );
 };
